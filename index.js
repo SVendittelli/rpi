@@ -41,5 +41,5 @@ app.listen(port, err => {
 });
 
 function log() {
-  console.log(`[${moment().format("YYYY-MM-DD HH:MM:SS")}]`, ...arguments);
+  console.log(`[${moment().format("YYYY-MM-DD HH:mm:ss")}]`, ...arguments);
 }
