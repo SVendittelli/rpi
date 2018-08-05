@@ -1,0 +1,51 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: "RPi Off"
+  description: Endpoint to shutdown RPi.
+  license:
+    name: MIT
+    url: https://github.com/SVendittelli/rpi/blob/master/LICENSE
+host: vendittelli.hopto.org
+basePath: /
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /off:
+    x-summary: Power Off
+    delete:
+      description: >-
+        You may power off the pi.
+      summary: Power Off Pi
+      responses:
+        204:
+          description: 'Pi powered off correctly.'
+        401:
+           $ref: "#/responses/UnauthorizedError"
+
+responses:
+  UnauthorizedError:
+    description: API key is missing or invalid.
+    headers:
+      WWW_Authenticate:
+        type: string
+
+securityDefinitions:
+   # X-API-Key: abcdef12345
+   APIKeyHeader:
+     type: apiKey
+     in: header
+     name: X-API-Key
+   # /path?api_key=abcdef12345
+   APIKeyQueryParam:
+     type: apiKey
+     in: query
+     name: api_key
+
+# Global security (applies to all operations):
+security:
+  - APIKeyHeader: []
