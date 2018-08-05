@@ -22,10 +22,13 @@ app.delete("/off", (request, response) => {
     delay = 1;
   }
   delay = Math.max(delay, 1);
-  log(`Shutdown in ${delay} minutes`);
+  log(`Shutdown requested in ${delay} minutes`);
 
-  script = ["pi-off.sh", "pi_off", token, delay].join(" ");
-  shell.exec(script, { async: true, silent: true });
+  script = ["bash pi-off.sh", "pi_off", token, delay].join(" ");
+  log(`Running script: ${script}`);
+  shell.exec(script, { silent: true }, (exitCode, stdout) =>
+    logSplit(stdout.split("\n"))
+  );
 
   response.statusCode = 204;
   response.json({});
@@ -42,4 +45,12 @@ app.listen(port, err => {
 
 function log() {
   console.log(`[${moment().format("YYYY-MM-DD HH:mm:ss")}]`, ...arguments);
+}
+
+function logSplit(array) {
+  array.forEach(element => {
+    if (element.length !== 0) {
+      log("Script output:", element);
+    }
+  });
 }
